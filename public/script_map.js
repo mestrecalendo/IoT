@@ -66,7 +66,7 @@ function highlightFeature(e) {
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
     layer.bringToFront();
   }
-  info.update(layer.feature.properties);
+  
 }
 
 
@@ -74,7 +74,7 @@ function highlightFeature(e) {
 // ... our listeners
 function resetHighlight(e) {
   geojson.resetStyle(e.target);
-  info.update();
+  
 }
 
 geojson = L.geoJson();
@@ -87,7 +87,6 @@ function onEachFeature(feature, layer) {
   layer.on({
     mouseover: highlightFeature,
     mouseout: resetHighlight,
-    click: zoomToFeature,
   }).bindPopup(function (layer) {
     return layer.feature.properties.description;
 })
