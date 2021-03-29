@@ -1,6 +1,8 @@
 // ../ sai da pasta atual
 
 //var map = L.map('mapid').setView([-8.7685893, -63.9004017], 15);
+
+
 var geojson;
 
 var bairros = {
@@ -40,35 +42,38 @@ function getColor(d) {
     : "#FFEDA0";
 }
 
+
+
 function style(feature) {
   return {
     fillColor: getColor(feature.properties.INFECTADOS),
     weight: 2,
-    opacity: 0.5,
+    opacity: 1,
     color: "white",
     dashArray: "3",
-    fillOpacity: 0.8,
+    fillOpacity: 1,
   };
 }
 
 L.geoJson(bairros, { style: style }).addTo(mapid);
 
+
+
 function highlightFeature(e) {
   var layer = e.target;
-
+  //console.log(layer.feature.properties.INFECTADOS);
   layer.setStyle({
     weight: 5,
     color: "#666",
     dashArray: "",
     fillOpacity: 1,
   });
-
+  
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
     layer.bringToFront();
   }
   
 }
-
 
 
 // ... our listeners
@@ -79,44 +84,63 @@ function resetHighlight(e) {
 
 geojson = L.geoJson();
 
-function zoomToFeature(e) {
-  mapid.fitBounds(e.target.getBounds());
-}
+
+
 
 function onEachFeature(feature, layer) {
+  var n = layer.feature.properties.description;
   layer.on({
+    click: onClick,
     mouseover: highlightFeature,
     mouseout: resetHighlight,
   }).bindPopup(function (layer) {
-    return layer.feature.properties.description;
+    return  n;
 })
 }
+
 
 geojson = L.geoJson(bairros, {
   style: style,
   onEachFeature: onEachFeature,
 }).addTo(mapid);
 
+var info = L.control();
+
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div'); // create a div with a class "info"
+    return this._div;
+};
 
 
-var legend = L.control({ position: "bottomright" });
+var legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (mapid) {
-  var div = L.DomUtil.create("div", "info legend"),
-    grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-    labels = [];
+legend.onAdd = function (map) {
 
-  // loop through our density intervals and generate a label with a colored square for each interval
-  for (var i = 0; i < grades.length; i++) {
-    div.innerHTML +=
-      '<i style="background:' +
-      getColor(grades[i] + 1) +
-      '"></i> ' +
-      grades[i] +
-      (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br>" : "+");
-  }
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        labels = [];
 
-  return div;
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
 };
 
 legend.addTo(mapid);
+
+function onClick(e) {
+  var layer = e.target;
+  var infec = layer.feature.properties.INFECTADOS;
+  
+
+  if(infec <= 50){
+    console.log("blik 1x: " + infec)
+} else if(infec <= 500){
+    console.log("blik 2x: " + infec)
+} else if(infec > 500){
+    console.log("blik 3x: " + infec)
+}}

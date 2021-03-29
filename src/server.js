@@ -7,18 +7,18 @@ var app = express();
 //app.get("/", function(req, res){
   //  res.sendFile("C:/Users/Calendoscopio/Desktop/IoT/public/index.html")
 //});
-app
   //utilizando arquivos estaticos
-  .use(express.static("public"))
+  //.use(express.static("public"))
   //utilizar body do req
-  .use(express.urlencoded({extended: true}))
+ 
   
 
   //conf template engine
-  .set("views", path.join(__dirname, "views")).set("view engine", "html")
+app.use(express.static(path.join(__dirname, 'public')))
 
+app.use(express.urlencoded({extended: false}));
   //criar rotas
-  .get("/C:\Users\Calendoscopio\Desktop\IoT\src\views\index.html")
+ 
 
 
 
