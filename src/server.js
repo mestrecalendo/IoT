@@ -1,31 +1,60 @@
 var express = require("express");
-const path = require("path");
-var app = express();
+var app = express(); // E inicie esse servidor
+const http = require("http");
+const socketIO = require("socket.io");
+const server = http.createServer(app);
 
+const io = socketIO(server);
+var five = require("johnny-five");
+var board = new five.Board();
 
+//const b = require("../public/script_map")
+//console.log(b.Click)
+/** 
+var five = require("johnny-five");
+var board = new five.Board();
+*/
 
-//app.get("/", function(req, res){
-  //  res.sendFile("C:/Users/Calendoscopio/Desktop/IoT/public/index.html")
-//});
-  //utilizando arquivos estaticos
-  //.use(express.static("public"))
-  //utilizar body do req
- 
-  
-
-  //conf template engine
-app.use(express.static(path.join(__dirname, 'public')))
-
-app.use(express.urlencoded({extended: false}));
-  //criar rotas
- 
-
-
-
-
-
-app.listen(5500,() => {
-    console.log('Servidor rodando na porta 5500...')
+app.get("/", function (req, res) {
+  // o que acontece quando vamos a `/`
+  console.log("Oi do `server.js`!");
+  res.send("Oi do `server.js`!"); // Devolve um texto de resposta
 });
-//localhost:5500
+app.use("/public", express.static(__dirname + "/../public")); // Rota publica para carregar o arquivo arduino.js
+app.get("/index", function (req, res) {
+  // O que acontece quando vamos ao `/dashboard`
+  console.log("index.html");
+  res.sendFile("index.html", { root: "." }); // Envie de volta o arquivo `dashboard.html` localizado no diretório atual (`root`)
+});
 
+board.on("ready", () => {
+  console.log("Board ready!");
+
+  //Whenever someone connects this gets executed
+  io.on("connection", function (socket) {
+    console.log("A user connected");
+
+    //Whenever someone disconnects this piece of code executed
+    socket.on("disconnect", function () {
+      console.log("A user disconnected");
+    });
+    socket.on("infectados", (infec) => {
+      var led = new five.Led('A0');
+      var l = new five.Led(13);
+      if (infec >= 0 && infec <= 500) {
+        console.log(infec + ": blik 1x");
+      
+      } else if (infec > 500 && infec <= 1000) {
+        console.log(infec + ": blik 2x");
+      
+      } else if (infec > 1000 && infec <= 2400) {
+        console.log(infec + ": blik 3x");
+      }
+      
+    });
+  });
+});
+
+server.listen(5500, () => {
+  console.log("Servidor rodando na porta 5500...");
+});
