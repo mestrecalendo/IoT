@@ -6,6 +6,7 @@ const server = http.createServer(app);
 
 const io = socketIO(server);
 var five = require("johnny-five");
+
 var board = new five.Board();
 
 //const b = require("../public/script_map")
@@ -30,6 +31,12 @@ app.get("/index", function (req, res) {
 board.on("ready", () => {
   console.log("Board ready!");
 
+  var led1 = new five.Led(13);
+  var led2 = new five.Led(7);// amarelo
+  var led3 = new five.Led(4); //vermelho
+ 
+  //led1.on();
+  
   //Whenever someone connects this gets executed
   io.on("connection", function (socket) {
     console.log("A user connected");
@@ -39,18 +46,28 @@ board.on("ready", () => {
       console.log("A user disconnected");
     });
     socket.on("infectados", (infec) => {
-      var led = new five.Led('A0');
-      var l = new five.Led(13);
+      //var led = new five.Led('A0');
+
       if (infec >= 0 && infec <= 500) {
-        console.log(infec + ": blik 1x");
-      
+        //console.log(infec + ": blik 1x");
+        led1.off();
+        led2.on();
+        led3.off();
+        
+        
       } else if (infec > 500 && infec <= 1000) {
-        console.log(infec + ": blik 2x");
-      
-      } else if (infec > 1000 && infec <= 2400) {
-        console.log(infec + ": blik 3x");
+        //console.log(infec + ": blik 2x");
+        led1.on();
+        //led2.on();
+        led2.on();
+        
+      } else if (infec > 1000) {
+        //console.log(infec + ": blik 3x");
+        led1.on();
+        led3.on();
+        
+        
       }
-      
     });
   });
 });
