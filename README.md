@@ -1,5 +1,4 @@
 # IoT
-<hr>
  Trabalho da faculdade, da matéria de internet das coisas, tem como finalidade integrar um Arduino a uma pagina web.<br>
  Criamos um mapa interativo para monitorar os casos de COVID-19 nos bairros de Porto Velho - RO, os LED's, que estão conectados no Arduino, acionarão dependendo da quantidade de infectados que o bairro possui.
  
