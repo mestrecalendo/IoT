@@ -11,9 +11,9 @@
  ![image](https://user-images.githubusercontent.com/57951365/114478735-fae6de80-9bcc-11eb-8da2-30d5fbf2e8c2.png)
  
  Node.js e as bibliotecas:<br>
-    -<a href="https://nodemon.io/">Nodemon</a>: Para facilitar minha vida :)<br>
-    -<a href="https://expressjs.com/pt-br/">Express</a>: Criar um servidor http<br>
-    -<a href="https://socket.io/">Socket.IO</a>: Comunicação entre o cliente e o servidor, para enviar os dados para o Arduino<br>
-    -<a href="https://www.arduino.cc/en/reference/firmata">Firmata</a>: Para permitir a programação do Arduino em Javascript, utilizei esse <a href="http://ramon-barros.com/arduino/2018/07/31/arduino-node-js.html">tutorial</a>.
-    -<a href="http://johnny-five.io/">Johnny-five</a>: Para programar o Arduino em Javascript.
+    - <a href="https://nodemon.io/">Nodemon</a>: Para facilitar minha vida :)<br>
+    - <a href="https://expressjs.com/pt-br/">Express</a>: Criar um servidor http<br>
+    - <a href="https://socket.io/">Socket.IO</a>: Comunicação entre o cliente e o servidor, para enviar os dados para o Arduino<br>
+    - <a href="https://www.arduino.cc/en/reference/firmata">Firmata</a>: Para permitir a programação do Arduino em Javascript, utilizei esse <a href="http://ramon-barros.com/arduino/2018/07/31/arduino-node-js.html">tutorial</a>.<br>
+    - <a href="http://johnny-five.io/">Johnny-five</a>: Para programar o Arduino em Javascript.
     
