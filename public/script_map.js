@@ -2,14 +2,6 @@
 
 //var map = L.map('mapid').setView([-8.7685893, -63.9004017], 15);
 
-//var L = require("leaflet");
-
-/** 
-var five = require("johnny-five");
-var board = new five.Board();
-*/
-
-//var {Click, onEachFeature} = require("../src/server")
 
 var geojson;
 
@@ -26,6 +18,7 @@ L.tileLayer(
   }
 ).addTo(mapid);
 
+// condições das cores
 L.geoJSON(bairros).addTo(mapid);
 
 function getColor(d) {
@@ -47,7 +40,7 @@ function getColor(d) {
 }
 
 
-
+// cor pela quantidade de infectados
 function style(feature) {
   return {
     fillColor: getColor(feature.properties.INFECTADOS),
@@ -65,7 +58,6 @@ L.geoJson(bairros, { style: style }).addTo(mapid);
 
 function highlightFeature(e) {
   var layer = e.target;
-  //console.log(layer.feature.properties.INFECTADOS);
   layer.setStyle({
     weight: 5,
     color: "#666",
@@ -88,13 +80,19 @@ function resetHighlight(e) {
 
 geojson = L.geoJson();
 
+function Click(e) {
+  var layer = e.target;
+  // manda a qtd de infectados para o server.js ao clicar no bairro
+  socket.emit('infectados', layer.feature.properties.INFECTADOS);
+  var infec = parseInt(layer.feature.properties.INFECTADOS);
+  //return console.log(infec);
+  
+};
 
-
-
+// executa as funçoes acima para cada feature(bairro)
 function onEachFeature(feature, layer) {
   var n = layer.feature.properties.description;
   layer.on({
-    
     click: Click,
     mouseover: highlightFeature,
     mouseout: resetHighlight,
@@ -103,13 +101,7 @@ function onEachFeature(feature, layer) {
 })
 }
 
-function Click(e) {
-  var layer = e.target;
-  socket.emit('infectados', layer.feature.properties.INFECTADOS);
-  var infec = parseInt(layer.feature.properties.INFECTADOS);
-  return console.log(infec);
-  
-};
+
 
 
 

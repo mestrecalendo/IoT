@@ -3,39 +3,35 @@ var app = express(); // E inicie esse servidor
 const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
-
 const io = socketIO(server);
+
+//------------ arduino board -------------
 var five = require("johnny-five");
 
 var board = new five.Board();
-
-//const b = require("../public/script_map")
-//console.log(b.Click)
-/** 
-var five = require("johnny-five");
-var board = new five.Board();
-*/
+//----------------------------------------
 
 app.get("/", function (req, res) {
   // o que acontece quando vamos a `/`
   console.log("Oi do `server.js`!");
   res.send("Oi do `server.js`!"); // Devolve um texto de resposta
 });
-app.use("/public", express.static(__dirname + "/../public")); // Rota publica para carregar o arquivo arduino.js
+app.use("/public", express.static(__dirname + "/../public")); // Rota publica para carregar os arquivos estaticos
+
 app.get("/index", function (req, res) {
-  // O que acontece quando vamos ao `/dashboard`
+  //  vamos ao `index`
   console.log("index.html");
-  res.sendFile("index.html", { root: "." }); // Envie de volta o arquivo `dashboard.html` localizado no diretório atual (`root`)
+  res.sendFile("index.html", { root: "." }); 
 });
 
 board.on("ready", () => {
   console.log("Board ready!");
 
-  var led1 = new five.Led(13);
+  var led1 = new five.Led(11);
   var led2 = new five.Led(7);// amarelo
   var led3 = new five.Led(4); //vermelho
  
-  //led1.on();
+ 
   
   //Whenever someone connects this gets executed
   io.on("connection", function (socket) {
@@ -46,8 +42,7 @@ board.on("ready", () => {
       console.log("A user disconnected");
     });
     socket.on("infectados", (infec) => {
-      //var led = new five.Led('A0');
-
+      
       if (infec >= 0 && infec <= 500) {
         //console.log(infec + ": blik 1x");
         led1.off();
